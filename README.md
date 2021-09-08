@@ -1,6 +1,7 @@
 # myCalculator
 - do npm install
 - open localhost:3000 and hit the endpoint /evaluate with body as {"expression": "1122.1 + 9" }
+- Answer rounded off to 2 places of decimal.
 - PLEASE ENSURE TO GIVE SPACES BETWEEN OPERATORS AND OPERANDS
 - This is to ensure that all the decimal values are also evaluated successfully.
 - Run scripts 'npm start' to run the application on port 3000 in localhost
