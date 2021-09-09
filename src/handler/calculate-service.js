@@ -1,4 +1,8 @@
-const { formatResult, applyOp, hasPrecedence } = require("./calculate-utils");
+const {
+  formatResult,
+  applyOperator,
+  hasPrecedence,
+} = require("./calculate-utils");
 
 /* 
   Service layer to evaluate the expressions
@@ -7,11 +11,11 @@ const { formatResult, applyOp, hasPrecedence } = require("./calculate-utils");
 */
 const evaluateExpression = (expression) => {
   let tokens = expression.split(" ");
-  // Stack for numbers: 'values'
-  let values = [];
+  // Stack for numbers: 'output'
+  let output = [];
 
-  // Stack for Operators: 'ops'
-  let ops = [];
+  // Stack for Operators: 'operators'
+  let operators = [];
 
   for (let i = 0; i < tokens.length; i++) {
     // Current token is a whitespace, skip it
@@ -21,23 +25,23 @@ const evaluateExpression = (expression) => {
 
     if (tokens[i] >= "0" && tokens[i] <= "9") {
       // Current token is a number, push it to stack for numbers
-      let sbuf = "";
+      let stringBuffer = "";
 
       //there may be more than one digits in number
       while (i < tokens.length && tokens[i] >= "0" && tokens[i] <= "9") {
-        sbuf = sbuf + tokens[i++];
+        stringBuffer = stringBuffer + tokens[i++];
       }
-      values.push(parseFloat(sbuf));
+      output.push(parseFloat(stringBuffer));
       i--;
     } else if (tokens[i] == "(") {
-      // Current token is an opening brace, push it to 'ops'
-      ops.push(tokens[i]);
+      // Current token is an opening brace, push it to 'operators'
+      operators.push(tokens[i]);
     } else if (tokens[i] == ")") {
       // Closing brace encountered, solve entire brace
-      while (ops[ops.length - 1] != "(") {
-        values.push(applyOp(ops.pop(), values.pop(), values.pop()));
+      while (operators[operators.length - 1] != "(") {
+        output.push(applyOperator(operators.pop(), output.pop(), output.pop()));
       }
-      ops.pop();
+      operators.pop();
     } else if (
       // Current token is an operator.
       tokens[i] == "+" ||
@@ -46,22 +50,25 @@ const evaluateExpression = (expression) => {
       tokens[i] == "/" ||
       tokens[i] == "%"
     ) {
-      while (ops.length > 0 && hasPrecedence(tokens[i], ops[ops.length - 1])) {
-        values.push(applyOp(ops.pop(), values.pop(), values.pop()));
+      while (
+        operators.length > 0 &&
+        hasPrecedence(tokens[i], operators[operators.length - 1])
+      ) {
+        output.push(applyOperator(operators.pop(), output.pop(), output.pop()));
       }
 
-      // Push current token to 'ops'.
-      ops.push(tokens[i]);
+      // Push current token to 'operators'.
+      operators.push(tokens[i]);
     }
   }
 
-  //entire expression has been parsed at this point, apply remaining ops to remaining values
-  while (ops.length > 0) {
-    values.push(applyOp(ops.pop(), values.pop(), values.pop()));
+  //entire expression has been parsed at this point, apply remaining operators to remaining output
+  while (operators.length > 0) {
+    output.push(applyOperator(operators.pop(), output.pop(), output.pop()));
   }
 
-  // top of 'values' contains result
-  return parseFloat(formatResult(values.pop()));
+  // top of 'output' contains result
+  return parseFloat(formatResult(output.pop()));
 };
 
 module.exports = evaluateExpression;

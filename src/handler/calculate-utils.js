@@ -24,11 +24,12 @@ const isOperand = (c) => {
 /*
     Utility to get the precedence accordingly
 */
-const getThePrecedence = (pre) => {
-  if (pre == "@" || pre == "(" || pre == ")") return 1;
-  else if (pre == "+" || pre == "-") return 2;
-  else if (pre == "/" || pre == "*" || pre == "%") return 3;
-  else if (pre == "^") return 4;
+const getThePrecedence = (precedence) => {
+  if (precedence == "@" || precedence == "(" || precedence == ")") return 1;
+  else if (precedence == "+" || precedence == "-") return 2;
+  else if (precedence == "/" || precedence == "*" || precedence == "%")
+    return 3;
+  else if (precedence == "^") return 4;
   else return 0;
 };
 
@@ -58,7 +59,7 @@ const hasPrecedence = (op1, op2) => {
 /*
     Utility to apply the operator and return the result
 */
-const applyOp = (op, b, a) => {
+const applyOperator = (op, b, a) => {
   switch (op) {
     case "+":
       return a + b;
@@ -86,5 +87,5 @@ module.exports = {
   getThePrecedence,
   formatResult,
   hasPrecedence,
-  applyOp,
+  applyOperator,
 };

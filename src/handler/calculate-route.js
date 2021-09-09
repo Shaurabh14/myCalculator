@@ -13,6 +13,7 @@ router.get("/", function (req, res, next) {
       //validate expression middleware layer
       const isLexAndSyntaxValid = validateExpression(reqBody.expression);
       if (isLexAndSyntaxValid) {
+        //evaluate expression service layer
         const result = evaluateExpression(reqBody.expression);
         if (result === 0)
           return res.status(200).send({
