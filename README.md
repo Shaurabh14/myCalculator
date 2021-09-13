@@ -1,4 +1,4 @@
-# myCalculator
+# myCalculator - a Node JS API to do multioperand operation in Javascript
 - do npm install
 - open localhost:3000 and hit the endpoint /evaluate with body as {"expression": "1122.1 + 9" }
 - Answer rounded off to 2 places of decimal.
